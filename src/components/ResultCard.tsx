@@ -42,6 +42,12 @@ export function ResultCard({ result }: ResultCardProps) {
           <dd>{isTrue ? 'Fact verified' : 'Not found on Wikipedia'}</dd>
         </div>
       </dl>
+
+      {!isTrue && result.hint ? (
+        <p className="mt-4 rounded-lg bg-amber-100 p-3 text-sm text-amber-900 dark:bg-amber-900/40 dark:text-amber-200">
+          {result.hint}
+        </p>
+      ) : null}
     </section>
   );
 }
