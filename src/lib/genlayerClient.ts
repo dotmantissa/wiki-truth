@@ -45,7 +45,7 @@ export async function callVerifyFact(
   if (!receipt) {
     throw new Error('Verification timed out before finalization. Try again.');
   }
-  if (receipt.txExecutionResultName !== ExecutionResult.FINISHED_WITH_RETURN) {
+  if (receipt.txExecutionResultName === ExecutionResult.FINISHED_WITH_ERROR) {
     throw new Error('Verification transaction finalized but contract execution failed.');
   }
 

@@ -20,25 +20,25 @@ export function VerificationForm(props: VerificationFormProps) {
   } = props;
 
   return (
-    <section className="rounded-2xl bg-white p-5 shadow-card">
+    <section className="rounded-2xl bg-white p-5 shadow-card dark:bg-slate-900">
       <div className="space-y-4">
         <label className="block">
-          <span className="mb-2 block text-sm font-medium text-slate-700">Wikipedia Page</span>
+          <span className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">Wikipedia Page</span>
           <input
             value={pageTitle}
             onChange={(event) => setPageTitle(event.target.value)}
             placeholder="e.g. Albert Einstein"
-            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:ring-4 focus:ring-blue-100"
+            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:ring-4 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
           />
         </label>
 
         <label className="block">
-          <span className="mb-2 block text-sm font-medium text-slate-700">Phrase To Verify</span>
+          <span className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">Phrase To Verify</span>
           <input
             value={expectedPhrase}
             onChange={(event) => setExpectedPhrase(event.target.value)}
             placeholder="e.g. theory of relativity"
-            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:ring-4 focus:ring-blue-100"
+            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:ring-4 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
           />
         </label>
 

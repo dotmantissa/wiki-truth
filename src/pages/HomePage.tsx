@@ -5,7 +5,7 @@ import { VerificationStatus } from '../components/VerificationStatus';
 import { WalletPanel } from '../components/WalletPanel';
 import { useWallet } from '../hooks/useWallet';
 import { useWikiTruth } from '../hooks/useWikiTruth';
-import { CHAIN_ID, STORAGE_LAST_QUERY_KEY } from '../lib/constants';
+import { CHAIN_ID, STORAGE_LAST_QUERY_KEY, STORAGE_THEME_KEY } from '../lib/constants';
 
 function getInitialQuery() {
   const saved = localStorage.getItem(STORAGE_LAST_QUERY_KEY);
@@ -40,10 +40,16 @@ export function HomePage() {
   const [pageTitle, setPageTitle] = useState(() => getInitialQuery().pageTitle);
   const [expectedPhrase, setExpectedPhrase] = useState(() => getInitialQuery().expectedPhrase);
   const [formError, setFormError] = useState('');
+  const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem(STORAGE_THEME_KEY) === 'dark');
 
   useEffect(() => {
     localStorage.setItem(STORAGE_LAST_QUERY_KEY, JSON.stringify({ pageTitle, expectedPhrase }));
   }, [pageTitle, expectedPhrase]);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDarkMode);
+    localStorage.setItem(STORAGE_THEME_KEY, isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
 
   const isBlocked = useMemo(() => {
     return !isConnected || wrongNetwork || isBusy || !pageTitle.trim() || !expectedPhrase.trim();
@@ -88,10 +94,12 @@ export function HomePage() {
         onConnect={connect}
         onDisconnect={disconnect}
         onSwitchNetwork={switchNetwork}
+        isDarkMode={isDarkMode}
+        onToggleDarkMode={() => setIsDarkMode((prev) => !prev)}
       />
 
       {isConnected && wrongNetwork ? (
-        <section className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-800">
+        <section className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-800 dark:border-amber-700 dark:bg-amber-900/40 dark:text-amber-200">
           <p className="font-medium">Switch to GenLayer Studio to continue.</p>
           <p className="text-sm">Network ID: 61999 | RPC: http://127.0.0.1:4000/api</p>
         </section>
@@ -107,7 +115,11 @@ export function HomePage() {
         isBusy={isBusy}
       />
 
-      {formError ? <p className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{formError}</p> : null}
+      {formError ? (
+        <p className="rounded-xl bg-red-50 p-3 text-sm text-red-700 dark:bg-red-900/40 dark:text-red-200">
+          {formError}
+        </p>
+      ) : null}
 
       <VerificationStatus state={state} message={statusMessage} error={error} />
 

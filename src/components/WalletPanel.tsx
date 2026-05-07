@@ -10,6 +10,8 @@ type WalletPanelProps = {
   onConnect: () => Promise<void>;
   onDisconnect: () => void;
   onSwitchNetwork: () => Promise<void>;
+  isDarkMode: boolean;
+  onToggleDarkMode: () => void;
 };
 
 function shortAddress(address: string) {
@@ -26,34 +28,52 @@ export function WalletPanel(props: WalletPanelProps) {
     isSwitching,
     onConnect,
     onDisconnect,
-    onSwitchNetwork
+    onSwitchNetwork,
+    isDarkMode,
+    onToggleDarkMode
   } = props;
 
   return (
-    <header className="rounded-2xl bg-white/90 p-4 shadow-soft backdrop-blur-sm">
+    <header className="rounded-2xl bg-white/90 p-4 shadow-soft backdrop-blur-sm dark:bg-slate-900/90">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-600">WikiTruth</p>
-          <h1 className="text-2xl font-semibold text-slate-900">Wikipedia Fact Checker</h1>
+          <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Wikipedia Fact Checker</h1>
         </div>
 
         {!isConnected ? (
-          <button
-            type="button"
-            onClick={onConnect}
-            className="rounded-xl bg-slate-900 px-5 py-3 text-sm font-medium text-white transition hover:scale-[1.01] hover:bg-slate-800 active:scale-[0.98]"
-          >
-            Connect Wallet
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={onToggleDarkMode}
+              className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+            >
+              {isDarkMode ? 'Light' : 'Dark'}
+            </button>
+            <button
+              type="button"
+              onClick={onConnect}
+              className="rounded-xl bg-slate-900 px-5 py-3 text-sm font-medium text-white transition hover:scale-[1.01] hover:bg-slate-800 active:scale-[0.98] dark:bg-blue-600 dark:hover:bg-blue-500"
+            >
+              Connect Wallet
+            </button>
+          </div>
         ) : (
           <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-xl bg-slate-100 px-3 py-2 text-sm font-medium text-slate-700">
+            <button
+              type="button"
+              onClick={onToggleDarkMode}
+              className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+            >
+              {isDarkMode ? 'Light' : 'Dark'}
+            </button>
+            <span className="rounded-xl bg-slate-100 px-3 py-2 text-sm font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-200">
               {address ? shortAddress(address) : ''}
             </span>
             <button
               type="button"
               onClick={onDisconnect}
-              className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-50"
+              className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
             >
               Disconnect
             </button>

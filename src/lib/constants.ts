@@ -32,3 +32,4 @@ export const WIKI_TRUTH_ABI = [
 ] as const;
 
 export const STORAGE_LAST_QUERY_KEY = 'wiki-truth:last-query';
+export const STORAGE_THEME_KEY = 'wiki-truth:theme';

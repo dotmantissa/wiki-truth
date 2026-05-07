@@ -9,6 +9,12 @@
     radial-gradient(circle at 100% 0, #e2e8f0 0, transparent 32%), #f8fafc;
 }
 
+:root.dark {
+  color: #e2e8f0;
+  background: radial-gradient(circle at 20% -20%, #1d4ed8 0, transparent 40%),
+    radial-gradient(circle at 100% 0, #0f172a 0, transparent 32%), #020617;
+}
+
 * {
   box-sizing: border-box;
 }
