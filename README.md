@@ -1,6 +1,6 @@
 # WikiTruth Frontend
 
-Production-ready React + TypeScript + Tailwind frontend for the WikiTruth GenLayer intelligent contract.
+Production-ready React + TypeScript + Tailwind frontend plus GenLayer intelligent contract for WikiTruth.
 
 ## Requirements
 
@@ -36,6 +36,27 @@ Open the shown localhost URL.
 ```bash
 npm run build
 npm run preview
+```
+
+## Contract
+
+- Contract source: `contract/wiki_truth.py`
+- Methods:
+  - `verify_fact(page_title: str, expected_phrase: str) -> None`
+  - `is_fact_true(page_title: str, expected_phrase: str) -> bool`
+
+The contract also accepts a full Wikipedia URL for `page_title` and extracts the title automatically (for example `https://en.wikipedia.org/wiki/Aesthetics` -> `Aesthetics`).
+
+## Contract Tests
+
+```bash
+pytest contract/tests/direct -v
+```
+
+Optional lint (if installed):
+
+```bash
+genvm-lint check contract/wiki_truth.py
 ```
 
 ## UX + Feature Coverage

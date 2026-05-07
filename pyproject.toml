@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wiki-truth"
+version = "0.1.0"
+description = "WikiTruth frontend and GenLayer contract"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0.0",
+  "ruff>=0.6.0"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["contract/tests"]
