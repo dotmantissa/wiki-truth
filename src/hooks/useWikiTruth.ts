@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 import { callIsFactTrue, callVerifyFact, type VerifyFactPayload } from '../lib/genlayerClient';
+import { getWikipediaPhraseHint } from '../lib/wikipedia';
 
 export type VerificationState = 'idle' | 'verifying' | 'success' | 'error';
 
@@ -7,7 +8,17 @@ export type VerificationResult = VerifyFactPayload & {
   isTrue: boolean;
   txHash: string;
   verifiedAt: string;
+  hint?: string | null;
 };
+
+const READ_RETRY_DELAY_MS = 3500;
+const MAX_READ_RETRIES = 12;
+
+function wait(ms: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
 
 export function useWikiTruth() {
   const [state, setState] = useState<VerificationState>('idle');
@@ -36,13 +47,26 @@ export function useWikiTruth() {
       });
 
       setStatusMessage('Checking truth result...');
-      const isTrue = await callIsFactTrue(account, payload);
+      let isTrue = false;
+      for (let attempt = 0; attempt < MAX_READ_RETRIES; attempt += 1) {
+        isTrue = await callIsFactTrue(account, payload);
+        if (isTrue) break;
+
+        if (attempt < MAX_READ_RETRIES - 1) {
+          setStatusMessage(
+            `Finalizing truth state... (${attempt + 1}/${MAX_READ_RETRIES})`
+          );
+          await wait(READ_RETRY_DELAY_MS);
+        }
+      }
+      const hint = isTrue ? null : await getWikipediaPhraseHint(payload.pageTitle, payload.expectedPhrase);
 
       setResult({
         ...payload,
         txHash,
         isTrue,
-        verifiedAt: new Date().toISOString()
+        verifiedAt: new Date().toISOString(),
+        hint
       });
       setState('success');
       setStatusMessage(isTrue ? 'Fact verified' : 'Not found on Wikipedia');
