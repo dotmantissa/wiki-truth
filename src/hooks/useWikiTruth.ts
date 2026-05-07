@@ -11,15 +11,6 @@ export type VerificationResult = VerifyFactPayload & {
   hint?: string | null;
 };
 
-const READ_RETRY_DELAY_MS = 3500;
-const MAX_READ_RETRIES = 12;
-
-function wait(ms: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
-
 export function useWikiTruth() {
   const [state, setState] = useState<VerificationState>('idle');
   const [statusMessage, setStatusMessage] = useState<string>('');
@@ -47,18 +38,7 @@ export function useWikiTruth() {
       });
 
       setStatusMessage('Checking truth result...');
-      let isTrue = false;
-      for (let attempt = 0; attempt < MAX_READ_RETRIES; attempt += 1) {
-        isTrue = await callIsFactTrue(account, payload);
-        if (isTrue) break;
-
-        if (attempt < MAX_READ_RETRIES - 1) {
-          setStatusMessage(
-            `Finalizing truth state... (${attempt + 1}/${MAX_READ_RETRIES})`
-          );
-          await wait(READ_RETRY_DELAY_MS);
-        }
-      }
+      const isTrue = await callIsFactTrue(account, payload);
       const hint = isTrue ? null : await getWikipediaPhraseHint(payload.pageTitle, payload.expectedPhrase);
 
       setResult({

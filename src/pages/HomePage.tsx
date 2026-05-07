@@ -6,6 +6,7 @@ import { WalletPanel } from '../components/WalletPanel';
 import { useWallet } from '../hooks/useWallet';
 import { useWikiTruth } from '../hooks/useWikiTruth';
 import { CHAIN_ID, STORAGE_LAST_QUERY_KEY, STORAGE_THEME_KEY } from '../lib/constants';
+import { extractWikipediaPageTitle } from '../lib/wikiInput';
 
 function getInitialQuery() {
   const saved = localStorage.getItem(STORAGE_LAST_QUERY_KEY);
@@ -69,8 +70,13 @@ export function HomePage() {
       return;
     }
 
+    const parsedTitle = extractWikipediaPageTitle(pageTitle);
+    if (parsedTitle !== pageTitle) {
+      setPageTitle(parsedTitle);
+    }
+
     const payload = {
-      pageTitle: pageTitle.trim(),
+      pageTitle: parsedTitle.trim(),
       expectedPhrase: expectedPhrase.trim()
     };
 
